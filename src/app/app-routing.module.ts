@@ -19,6 +19,10 @@ const routes: Routes = [
   {
     path: 'create',
     loadChildren: './create/create.module#CreatePageModule'
+  },
+  {
+    path: 'link',
+    loadChildren: './link/link.module#LinkPageModule'
   }
 ];
 
