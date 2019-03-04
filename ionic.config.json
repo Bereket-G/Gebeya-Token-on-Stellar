@@ -1,5 +1,7 @@
 {
   "name": "Gebeya Token",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
