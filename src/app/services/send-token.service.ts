@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-//import StellarSdk  from 'stellar-sdk';
-var StellarSdk = require('stellar-sdk')
+import * as StellarSdk from 'stellar-sdk';
+// var StellarSdk = require('stellar-sdk')
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class SendTokenService {
   sendToken(destinationId: string): Observable<any> {
 
     var stellarResult;
-
+    //console.log("hjkl");
     StellarSdk.Network.useTestNetwork();
 
     var destinationId = 'GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q723BM2OARMDUYEJ5';
@@ -30,16 +30,16 @@ export class SendTokenService {
     this.server.loadAccount(destinationId)
       // If the account is not found, surface a nicer error message for logging.
       .catch(StellarSdk.NotFoundError, function (error) {
-        //throw new Error('The destination account does not exist!');
-        return 'The destination account does not exist!';
+        throw new Error('The destination account does not exist!');
+        // return 'The destination account does not exist!';
       })
 
       // If there was no error, load up-to-date information on the account.
-      .then(function () {
-        return this.server.loadAccount(this.isourceKeys.publicKey());
+      .then(() => {
+        return this.server.loadAccount(this.sourceKeys.publicKey());
       })
 
-      .then(function (sourceAccount) {
+      .then((sourceAccount) => {
         // Start building the transaction.
         transaction = new StellarSdk.TransactionBuilder(sourceAccount)
           .addOperation(StellarSdk.Operation.payment({
@@ -53,15 +53,17 @@ export class SendTokenService {
           // A memo allows you to add your own metadata to a transaction. It's
           // optional and does not affect how Stellar treats the transaction.
           .addMemo(StellarSdk.Memo.text('Test Transaction'))
+          .setTimeout(10)
           .build();
 
         // Sign the transaction to prove you are actually the person sending it.
         transaction.sign(this.sourceKeys);
-        
+
         // And finally, send it off to Stellar!
         return this.server.submitTransaction(transaction);
+        console.log(stellarResult)
       })
-      .then(function (result) {
+      .then((result) => {
         console.log('Success! Results:', result);
         stellarResult = "Success"
       })
@@ -71,8 +73,9 @@ export class SendTokenService {
         // already built transaction:
         //this.server.submitTransaction(transaction);
         stellarResult = "Failure"
+        //console.log('success!')
       });
-
+    //console.log(stellarResult)
     return stellarResult;
   }
 }
