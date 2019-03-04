@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import * as StellarSdk from 'stellar-sdk';
+
+const StellarSdk = require('stellar-sdk');
 
 const server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
 
