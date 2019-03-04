@@ -23,13 +23,13 @@ export class CreatePage implements OnInit {
 
   createAccount() {
     this.loading = true;
-     this.accountCreated = false;
+    this.accountCreated = false;
     StellarSdk.Network.useTestNetwork();
     const server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
     this.newAccount = this.generateAccount();
-     fetch(
-        `https://friendbot.stellar.org?addr=${encodeURIComponent(this.newAccount.publicKey)}`
-      )
+    fetch(
+      `https://friendbot.stellar.org?addr=${encodeURIComponent(this.newAccount.publicKey)}`
+    )
       .then((result) => {
         result.json().then(data => {
           console.log(data);
@@ -39,8 +39,8 @@ export class CreatePage implements OnInit {
         });
       })
       .catch((err) => {
-          console.error('ERROR!', err);
-          this.loading = false;
+        console.error('ERROR!', err);
+        this.loading = false;
       });
   }
 

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as StellarSdk from 'stellar-sdk';
 // var StellarSdk = require('stellar-sdk')
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -10,15 +11,24 @@ export class SendTokenService {
 
   horizonUrl = 'https://horizon-testnet.stellar.org';
   server = new StellarSdk.Server(this.horizonUrl);
-  sourceKeys = StellarSdk.Keypair
-    .fromSecret('SATWV32ASF2BTMGC6VQ6UP5HLCPNG5ZER6AYJUSEBKPUN55UMCUEYOOI');
+  sourceKeys: any;
+  constructor(private storage: Storage) {
 
-  constructor() { }
+    this.storage.get('account').then(value => {
+      if (value === null) {
+        alert('Account not found !');
+        return;
+      }
 
-  sendToken(destinationId: string): Observable<any> {
+      this.sourceKeys = StellarSdk.Keypair
+        .fromSecret(value.privateKey);
+
+    });
+  }
+
+  sendToken(destinationId: string): any {
 
     var stellarResult;
-    //console.log("hjkl");
     StellarSdk.Network.useTestNetwork();
 
     var destinationId = 'GA2C5RFPE6GCKMY3US5PAB6UZLKIGSPIUKSLRB6Q723BM2OARMDUYEJ5';
@@ -61,21 +71,24 @@ export class SendTokenService {
 
         // And finally, send it off to Stellar!
         return this.server.submitTransaction(transaction);
-        console.log(stellarResult)
       })
       .then((result) => {
-        console.log('Success! Results:', result);
-        stellarResult = "Success"
+        return this.server.operations()
+          .forTransaction(result.hash)
+          .call();
+
+        // console.log('Success! Results:', result);
+        // stellarResult = "Success"
+      })
+      .then((_response_) => {
+        console.log(_response_.records[0].transaction_successful);
+        return _response_.records[0].transaction_successful
       })
       .catch(function (error) {
         console.error('Something went wrong!', error);
         // If the result is unknown (no response body, timeout etc.) we simply resubmit
         // already built transaction:
         //this.server.submitTransaction(transaction);
-        stellarResult = "Failure"
-        //console.log('success!')
       });
-    //console.log(stellarResult)
-    return stellarResult;
   }
 }
