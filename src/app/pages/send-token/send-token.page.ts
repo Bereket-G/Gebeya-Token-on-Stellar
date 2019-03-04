@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { SendTokenService } from 'src/app/services/send-token.service';
 
 @Component({
   selector: 'app-send-token',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SendTokenPage implements OnInit {
 
-  constructor() { }
+  results: Observable<any>;
+  destinationId: string = '';
+
+  constructor(private sendTokenService: SendTokenService) { }
 
   ngOnInit() {
+  }
+
+  submitToken() {
+    // Call our service function which returns an Observable
+    this.results = this.sendTokenService.sendToken(this.destinationId);
   }
 
 }

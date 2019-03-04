@@ -7,7 +7,7 @@
 <ion-content padding>
 
   <!-- Destination Id -->
-  <ion-input placeholder="Destination Id"></ion-input>
-  <ion-button expand="block">Send Token</ion-button>
+  <ion-input placeholder="Destination Id" [(ngModel)]="destinationId"></ion-input>
+  <ion-button expand="block" (click)="submitToken()">Send Token</ion-button>
 
 </ion-content>
