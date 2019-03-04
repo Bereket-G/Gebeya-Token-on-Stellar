@@ -36,9 +36,6 @@ export class CreatePage implements OnInit {
           this.loading = false;
           this.accountCreated = true;
           this.storage.set('account', this.newAccount);
-          this.storage.get('account').then(value => {
-              console.log(value.publicKey, value.privateKey, 'new account');
-          });
         });
       })
       .catch((err) => {
