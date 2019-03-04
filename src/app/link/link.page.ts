@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import * as StellarSdk from 'stellar-sdk';
 import { Router } from '@angular/router';
 
@@ -14,14 +15,18 @@ export class LinkPage implements OnInit {
   privateKey: string
 
   constructor(
-    public router: Router
+    public router: Router, private storage: Storage
   ) {  }
  
   linkForm() {
     let key = StellarSdk.StrKey.isValidEd25519SecretSeed(this.privateKey)
-   console.log(key)
+   if(key){
+     const keypair = StellarSdk.Keypair.fromSecret(this.privateKey)
+     this.storage.set('account', { publicKey: keypair.publicKey(), privateKey: keypair.secret()});
+     this.router.navigateByUrl('/home');
+   }
 
-   this.router.navigateByUrl('/home');
+  
   }
 
   ngOnInit() {
