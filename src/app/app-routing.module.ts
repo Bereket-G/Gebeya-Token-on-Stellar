@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'send-token',
     pathMatch: 'full'
   },
   {
@@ -15,11 +15,15 @@ const routes: Routes = [
     path: 'list',
     loadChildren: './list/list.module#ListPageModule'
   },
-  { path: 'send-token', loadChildren: './pages/send-token/send-token.module#SendTokenPageModule' }
+  { path: 'send-token', loadChildren: './pages/send-token/send-token.module#SendTokenPageModule' },
+  {
+    path: 'create',
+    loadChildren: './create/create.module#CreatePageModule'
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
