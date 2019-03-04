@@ -18,6 +18,9 @@
 
         <h1 *ngFor="let _balance of balances">
           $ {{_balance.balance}} {{_balance.asset_code }}
+          <ng-container *ngIf="!_balance.asset_code">
+              XLM
+          </ng-container>
         </h1>
         <h1>  </h1>
       </ion-card-content>
