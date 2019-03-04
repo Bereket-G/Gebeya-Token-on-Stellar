@@ -20,4 +20,18 @@ import { HomePage } from './home.page';
   ],
   declarations: [HomePage]
 })
-export class HomePageModule {}
+export class HomePageModule {
+
+  balance: number ;
+
+  constructor() {
+    this.getBalance();
+  }
+
+
+  getBalance(): void {
+    console.log('get Balance called');
+    this.balance = 232; // balance for trying purpose
+  }
+
+}
