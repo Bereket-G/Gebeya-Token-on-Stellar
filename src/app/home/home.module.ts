@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -21,17 +21,4 @@ import { HomePage } from './home.page';
   declarations: [HomePage]
 })
 export class HomePageModule {
-
-  balance: number ;
-
-  constructor() {
-    this.getBalance();
-  }
-
-
-  getBalance(): void {
-    console.log('get Balance called');
-    this.balance = 232; // balance for trying purpose
-  }
-
 }

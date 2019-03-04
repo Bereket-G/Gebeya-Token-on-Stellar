@@ -15,7 +15,11 @@
         <ion-card-subtitle>Greetings, John Doe</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content style="align-items: center">
-        <h1 > $ <b> {{balance}}  </b> GBYT </h1>
+
+        <h1 *ngFor="let _balance of balances">
+          $ {{_balance.balance}}  {{_balance.asset_code }}
+        </h1>
+        <h1>  </h1>
       </ion-card-content>
     </ion-card>
     <ion-list lines="none">
