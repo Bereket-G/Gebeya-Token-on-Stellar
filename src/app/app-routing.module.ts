@@ -15,10 +15,14 @@ const routes: Routes = [
     path: 'list',
     loadChildren: './list/list.module#ListPageModule'
   },
-  { path: 'send-token', loadChildren: './pages/send-token/send-token.module#SendTokenPageModule' },
+  // { path: 'send-token', loadChildren: './pages/send-token/send-token.module#SendTokenPageModule' },
   {
     path: 'create',
     loadChildren: './create/create.module#CreatePageModule'
+  },
+  {
+    path: 'link',
+    loadChildren: './link/link.module#LinkPageModule'
   }
 ];
 

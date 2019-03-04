@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Link Account
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+
+        <form (ngSubmit)="linkForm()">
+            <ion-item>
+                <ion-label>Enter your secret key:</ion-label>
+                <ion-input type="text" [(ngModel)]="privateKey" name="privateKey"></ion-input>
+            </ion-item>
+            <button ion-button type="submit" block>Submit</button>
+        </form>
+
+    </ion-grid>
+
+</ion-content>
