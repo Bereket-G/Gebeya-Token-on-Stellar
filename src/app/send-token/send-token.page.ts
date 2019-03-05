@@ -38,7 +38,7 @@ export class SendTokenPage implements OnInit {
     this.loading = true;
     this.response = false;
     this.resultToken = false;
-    var amount = +this.gebeyaToken * 100;
+    var amount = +this.gebeyaToken ;
     this.amountString = amount.toString()
 
     console.log(amount);
@@ -64,7 +64,7 @@ export class SendTokenPage implements OnInit {
             destination: this.destinationId,
             // Because Stellar allows transaction in many currencies, you must
             // specify the asset type. The special "native" asset represents Lumens.
-            asset: StellarSdk.Asset.native(),
+            asset:  new StellarSdk.Asset('GBYT', 'GDP6QEA4A5CRNGUIGYHHFETDPNEESIZFW53RVISXGSALI7KXNUC4YBWD'),
             amount: this.amountString
           }))
 
