@@ -18,9 +18,6 @@
             <ion-col *ngIf="loading">
                 <ion-spinner></ion-spinner>
             </ion-col>
-            <ion-col>
-                ss
-            </ion-col>
         </ion-row>
         <ion-row *ngIf="accountCreated">
             <ion-card>
@@ -40,7 +37,7 @@
                     </strong> {{ newAccount.privateKey }}
                 </ion-card-content>
             </ion-card>
-
+            <ion-button style="justify-content: center" color="success" [routerLink]="['/home']">Back</ion-button>
         </ion-row>
     </ion-grid>
 

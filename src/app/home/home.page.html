@@ -1,47 +1,47 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>
-      Dashboard
-    </ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Dashboard
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
     <ion-card class="welcome-card">
-      <ion-card-header>
-        <ion-card-subtitle>Greetings, John Doe</ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content style="align-items: center">
+        <ion-card-header>
+            <ion-card-subtitle>Your current account</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content style="align-items: center">
 
-        <h1 *ngFor="let _balance of balances">
-          $ {{_balance.balance}} {{_balance.asset_code }}
-          <ng-container *ngIf="!_balance.asset_code">
-              XLM
-          </ng-container>
-        </h1>
-        <h1>  </h1>
-      </ion-card-content>
+            <h1 *ngFor="let _balance of balances">
+                {{_balance.balance}} {{_balance.asset_code }}
+                <ng-container *ngIf="!_balance.asset_code">
+                    XLM
+                </ng-container>
+            </h1>
+            <h1> </h1>
+        </ion-card-content>
     </ion-card>
     <ion-list lines="none">
-      <ion-list-header>
-        <!--<ion-label>Exchange Currencies</ion-label>-->
-      </ion-list-header>
+        <ion-list-header>
+            <!--<ion-label>Exchange Currencies</ion-label>-->
+        </ion-list-header>
         <ion-item>
-          <!--<div class="col col-100">-->
+            <!--<div class="col col-100">-->
             <!--<ion-card class="col col-100">-->
-              <!--<ion-card-header>-->
-                <!--$ Bit Coin      232.21-->
-              <!--</ion-card-header>-->
+            <!--<ion-card-header>-->
+            <!--$ Bit Coin      232.21-->
+            <!--</ion-card-header>-->
             <!--</ion-card>-->
             <!--<ion-card class="col col-100">-->
-              <!--<ion-card-header>-->
-                <!--$ Ethereum      2132.14-->
-              <!--</ion-card-header>-->
+            <!--<ion-card-header>-->
+            <!--$ Ethereum      2132.14-->
+            <!--</ion-card-header>-->
             <!--</ion-card>-->
-          <!--</div>-->
+            <!--</div>-->
         </ion-item>
     </ion-list>
 </ion-content>

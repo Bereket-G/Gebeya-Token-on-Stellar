@@ -25,8 +25,6 @@ export class LinkPage implements OnInit {
      this.storage.set('account', { publicKey: keypair.publicKey(), privateKey: keypair.secret()});
      this.router.navigateByUrl('/home');
    }
-
-  
   }
 
   ngOnInit() {

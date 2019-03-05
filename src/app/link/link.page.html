@@ -13,13 +13,14 @@
     <ion-grid>
 
         <form (ngSubmit)="linkForm()">
-            <ion-item>
-                <ion-label>Enter your secret key:</ion-label>
-                <ion-input type="text" [(ngModel)]="privateKey" name="privateKey"></ion-input>
-            </ion-item>
-            <button ion-button type="submit" block>Submit</button>
+            <div>
+                <ion-item>
+                    <ion-input type="text" placeholder="Enter your secret key" [(ngModel)]="privateKey"></ion-input>
+                </ion-item>
+            </div>
+            <div margin-top>
+                <ion-button type="submit" color="primary">Link Account</ion-button>
+            </div>
         </form>
-
     </ion-grid>
-
 </ion-content>
