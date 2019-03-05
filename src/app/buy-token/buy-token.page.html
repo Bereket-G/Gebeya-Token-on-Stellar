@@ -1,16 +1,16 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
     <ion-title>buy-token</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-
-  <ion-card>
+  <ion-card padding>
     <ion-card-title> Buy Tokens </ion-card-title>
-
-    <ion-input>  </ion-input>
-
+    <ion-input type="text" color="primary" placeholder="Number of Gebeya token" [(ngModel)]="amount"></ion-input>
+    <ion-button color="primary" (click)="buyToken()"> Buy Token</ion-button>
   </ion-card>
-
 </ion-content>
