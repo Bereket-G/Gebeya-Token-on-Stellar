@@ -10,7 +10,8 @@ import * as StellarSdk from 'stellar-sdk';
 export class BuyTokenPage implements OnInit {
 
     public account: any;
-    ASSETCODE= "GBYT";
+    ASSETCODE= 'GBYT';
+    priceRate = 0.01;
     sourceKeys: any;
     accountBalances: any;
     hasTrustLine = false;
@@ -38,7 +39,7 @@ export class BuyTokenPage implements OnInit {
             }
 
             this.account = value;
-            // fetching accound details 
+            // fetching accound details
             this.server.accounts()
                 .accountId(this.account.publicKey)
                 .call()
@@ -47,7 +48,7 @@ export class BuyTokenPage implements OnInit {
                     this.accountBalances = accountResult.balances;
                 })
                 .catch(function (err) {
-                    alert("Network Error");
+                    alert('Network Error');
                     console.error(err);
                 });
 
@@ -62,21 +63,20 @@ export class BuyTokenPage implements OnInit {
 
     async buyToken() {
 
-        let messages = [];
-        let returnObject = {
+        const messages = [];
+        const returnObject = {
             data: {},
             message: messages
         };
 
-        let operations = [];
+        const operations = [];
 
         // check if account has enought balance
-        if (this.accountBalances)
             this.accountBalances.map((balance) => {
                 if (balance.asset_code === this.ASSETCODE && balance.asset_issuer === this.issuerAccount.PublicKey) {
                     this.hasTrustLine = true;
                 }
-            })
+            });
 
 
 
@@ -85,11 +85,11 @@ export class BuyTokenPage implements OnInit {
             console.log('rcvrDetails: ', receiverDetail);
 
             // build a transaction
-            let transaction = new StellarSdk.TransactionBuilder(receiverDetail);
+            const transaction = new StellarSdk.TransactionBuilder(receiverDetail);
 
             if (!this.hasTrustLine) {
-                let customAsset = new StellarSdk.Asset(this.ASSETCODE, this.issuerAccount.PublicKey);
-                let operationObj = {
+                const customAsset = new StellarSdk.Asset(this.ASSETCODE, this.issuerAccount.PublicKey);
+                const operationObj = {
                     asset: customAsset
                 };
 
@@ -99,13 +99,13 @@ export class BuyTokenPage implements OnInit {
             transaction.addOperation(StellarSdk.Operation.manageOffer({
                 buying: new StellarSdk.Asset(this.ASSETCODE, this.issuerAccount.PublicKey),
                 selling: StellarSdk.Asset.native(),
-                amount: String(this.amount),
-                price: 100
-            }))
+                amount: String(this.amount / this.priceRate),
+                price: this.priceRate
+            }));
 
 
             // build and sign transaction
-            let builtTx =  transaction.setTimeout(30).build();
+            const builtTx =  transaction.setTimeout(30).build();
             builtTx.sign(StellarSdk.Keypair.fromSecret(this.account.privateKey));
 
             this.server.submitTransaction(builtTx)
@@ -120,10 +120,10 @@ export class BuyTokenPage implements OnInit {
                     return _response_.records[0].transaction_successful;
                 }).then(() => {
                     console.log('Success');
-                })
+                });
 
         } catch (error) {
-            console.log("error: ", error);
+            console.log('error: ', error);
             messages.push('An error occured. Check logs');
         }
     }
