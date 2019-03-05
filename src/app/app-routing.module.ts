@@ -23,7 +23,8 @@ const routes: Routes = [
   {
     path: 'link',
     loadChildren: './link/link.module#LinkPageModule'
-  }
+  },
+  { path: 'buy-token', loadChildren: './buy-token/buy-token.module#BuyTokenPageModule' }
 ];
 
 @NgModule({
