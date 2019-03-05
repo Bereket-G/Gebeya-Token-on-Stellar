@@ -16,9 +16,24 @@ export class AppComponent {
       icon: 'home'
     },
     {
+      title: 'Create',
+      url: '/create',
+      icon: 'create'
+    },
+    {
       title: 'List',
       url: '/list',
       icon: 'list'
+    },
+    {
+      title: 'Link',
+      url: '/link',
+      icon: 'link'
+    },
+    {
+      title: 'Buy Token',
+      url: '/buy-token',
+      icon: 'buy'
     },
     {
       title: 'Send Token',
