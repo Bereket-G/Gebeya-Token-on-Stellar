@@ -19,7 +19,13 @@ export class AppComponent {
       title: 'List',
       url: '/list',
       icon: 'list'
+    },
+    {
+      title: 'Send Token',
+      url: '/send-token',
+      icon: 'send'
     }
+
   ];
 
   constructor(

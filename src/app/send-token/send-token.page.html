@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Send Token</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding margin-top>
+
+  <ion-row>
+
+  </ion-row>
+  <!-- Destination Id -->
+  <div>
+    <ion-item>
+      <ion-input type="text" color="primary" placeholder="Number of Gebeya token" [(ngModel)]="gebeyaToken"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input type="text" color="primary" placeholder="Destination Id" [(ngModel)]="destinationId"></ion-input>
+    </ion-item>
+  </div>
+  <div margin-top>
+    <ion-button color="primary" (click)="sendToken()" *ngIf="!loading">Send Token</ion-button>
+  </div>
+  <div margin-top style="width: 100%; text-align: center;">
+    <ion-spinner *ngIf="loading" center name="bubbles" color="tertiary"></ion-spinner>
+  </div>
+
+  <ion-row *ngIf="response">
+    <ion-card>
+      <ion-card-header>
+        <ion-item>
+          <ion-card-title><strong>Result</strong></ion-card-title>
+        </ion-item>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item *ngIf="resultToken">
+          <ion-label color="success">GBYT token successfully sent!</ion-label>
+        </ion-item>
+        <ion-item *ngIf="!resultToken && !errorResponse">
+          <ion-label color="danger">Not successfull! Please try again later!
+          </ion-label>
+        </ion-item>
+        <ion-item *ngIf="errorResponse && !resultToken">
+          <ion-label color="danger">The destination account does not exist!
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+  </ion-row>
+</ion-content>

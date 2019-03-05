@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-//import { SendTokenService } from 'src/app/services/send-token.service';
 import * as StellarSdk from 'stellar-sdk';
-// var StellarSdk = require('stellar-sdk')
 import { Storage } from '@ionic/storage';
 
 @Component({
@@ -19,9 +16,10 @@ export class SendTokenPage implements OnInit {
   resultToken: boolean;
   response: boolean;
   errorResponse: boolean;
-
-  //results: Observable<any>;
   destinationId: string = '';
+  gebeyaToken: string;
+  amountString: string;
+  //amount
 
   constructor(private storage: Storage) {
     this.storage.get('account').then(value => {
@@ -39,6 +37,11 @@ export class SendTokenPage implements OnInit {
   sendToken() {
     this.loading = true;
     this.response = false;
+    this.resultToken = false;
+    var amount = +this.gebeyaToken * 100;
+    this.amountString = amount.toString()
+
+    console.log(amount);
     StellarSdk.Network.useTestNetwork();
 
     // Transaction will hold a built transaction we can resubmit if the result is unknown.
@@ -49,7 +52,6 @@ export class SendTokenPage implements OnInit {
       // If the account is not found, surface a nicer error message for logging.
       .catch(StellarSdk.NotFoundError, function (error) {
         throw new Error('The destination account does not exist!');
-        // return 'The destination account does not exist!';
       })
       // If there was no error, load up-to-date information on the account.
       .then(() => {
@@ -63,7 +65,7 @@ export class SendTokenPage implements OnInit {
             // Because Stellar allows transaction in many currencies, you must
             // specify the asset type. The special "native" asset represents Lumens.
             asset: StellarSdk.Asset.native(),
-            amount: "100"
+            amount: this.amountString
           }))
 
           // A memo allows you to add your own metadata to a transaction. It's
@@ -91,7 +93,6 @@ export class SendTokenPage implements OnInit {
       }).then(() => {
         this.loading = false;
         this.response = true;
-
       })
       .catch((error) => {
         this.loading = false;
