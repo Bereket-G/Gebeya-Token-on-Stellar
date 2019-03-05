@@ -31,6 +31,10 @@ export class BuyTokenPage implements OnInit {
     });
   }
 
+  ngOnInit() {
+  }
+
+
   createTrustLine() {
     let messages = [];
     let returnObject = {
@@ -42,6 +46,8 @@ export class BuyTokenPage implements OnInit {
     // Initialisae the horizon Server
     StellarSdk.Config.setAllowHttp(true);
     StellarSdk.Network.useTestNetwork();
+
+
     //let horizonServer = new StellarSdk.Server(config.get("horizonUrl"));
     let horizonUrl = 'https://horizon-testnet.stellar.org';
     let server = new StellarSdk.Server(horizonUrl);
@@ -90,7 +96,5 @@ export class BuyTokenPage implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
 
 }
