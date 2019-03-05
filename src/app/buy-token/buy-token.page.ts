@@ -3,106 +3,128 @@ import { Storage } from '@ionic/storage';
 import * as StellarSdk from 'stellar-sdk';
 
 @Component({
-  selector: 'app-buy-token',
-  templateUrl: './buy-token.page.html',
-  styleUrls: ['./buy-token.page.scss'],
+    selector: 'app-buy-token',
+    templateUrl: './buy-token.page.html',
+    styleUrls: ['./buy-token.page.scss'],
 })
 export class BuyTokenPage implements OnInit {
 
-  public account: any;
-  sourceKeys: any;
-  public amount = 451;
-  horizonUrl = 'https://horizon-testnet.stellar.org';
-  server = new StellarSdk.Server(this.horizonUrl);
-  issuerAccount = {
-    'PrivateKey' : 'SBDBUA25ZEEGKPYYXT5KAQL4RGR3QUNATQKRJ4LHLCDL2ELEHMSKXZBI',
-    'PublicKey' : 'GDP6QEA4A5CRNGUIGYHHFETDPNEESIZFW53RVISXGSALI7KXNUC4YBWD'
-  };
+    public account: any;
+    ASSETCODE= "GBYT";
+    sourceKeys: any;
+    accountBalances: any;
+    hasTrustLine = false;
+    public amount = 4;
+    horizonUrl = 'https://horizon-testnet.stellar.org';
+    server: any;
+    issuerAccount = {
+        'PublicKey': 'GDP6QEA4A5CRNGUIGYHHFETDPNEESIZFW53RVISXGSALI7KXNUC4YBWD'
+    };
 
-  constructor(private storage: Storage) {
+    constructor(private storage: Storage) {
 
-    StellarSdk.Network.useTestNetwork();
+    }
 
-    this.storage.get('account').then(value => {
-      if (value === null) {
-        alert('Account not found !');
-        return;
-      }
+    ngOnInit() {
 
-      this.sourceKeys = StellarSdk.Keypair
-          .fromSecret(value.privateKey);
+        this.server = new StellarSdk.Server(this.horizonUrl);
 
-    });
-  }
+        StellarSdk.Network.useTestNetwork();
 
-  ngOnInit() {
-    this.createOffer();
-  }
+        this.storage.get('account').then(value => {
+            if (value === null) {
+                alert('Account not found !');
+                return;
+            }
 
-  createOffer() {
+            this.account = value;
+            // fetching accound details 
+            this.server.accounts()
+                .accountId(this.account.publicKey)
+                .call()
+                .then((accountResult) => {
+                    console.log(accountResult.balances);
+                    this.accountBalances = accountResult.balances;
+                })
+                .catch(function (err) {
+                    alert("Network Error");
+                    console.error(err);
+                });
 
-    this.storage.get('account').then(value => {
-      if (value === null) {
-        alert('Public key not found !');
-        return;
-      }
-      this.account = value;
-    });
-
-    // First, check to make sure that the destination account exists.
-    this.server.loadAccount(this.issuerAccount.PublicKey)
-    // If the account is not found, surface a nicer error message for logging.
-        .catch(StellarSdk.NotFoundError, function (error) {
-          throw new Error('The destination account does not exist!');
-        })
-        // If there was no error, load up-to-date information on the account.
-        .then(() => {
-          return this.server.loadAccount(this.sourceKeys.publicKey());
-        })
-        .then((sourceAccount) => {
-          // Start building the transaction.
-          const transaction = new StellarSdk.TransactionBuilder(sourceAccount)
-              .addOperation(StellarSdk.Operation.manageOffer({
-                buying : new StellarSdk.Asset('GBYT', this.issuerAccount.PublicKey),
-                selling : StellarSdk.Asset.native(),
-                // Because Stellar allows transaction in many currencies, you must
-                // specify the asset type. The special "native" asset represents Lumens.
-                amount: '7845',
-                price : 0.01
-              }))
-
-              // A memo allows you to add your own metadata to a transaction. It's
-              // optional and does not affect how Stellar treats the transaction.
-              .addMemo(StellarSdk.Memo.text('Test Transaction'))
-              .setTimeout(10)
-              .build();
-
-          // Sign the transaction to prove you are actually the person sending it.
-          transaction.sign(this.sourceKeys);
-
-          // And finally, send it off to Stellar!
-          return this.server.submitTransaction(transaction);
-        }).then((result) => {
-          console.log(result);
-      return this.server.operations()
-          .forTransaction(result.hash)
-          .call();
-
-      // console.log('Success! Results:', result);
-      // stellarResult = "Success"
-    }).then((_response_) => {
-      console.log(_response_.records[0].transaction_successful);
-      // this.resultToken = _response_.records[0].transaction_successful;
-      return _response_.records[0].transaction_successful;
-    }).then(() => {
-      console.log('Success');
-    })
-        .catch((error) => {
-          console.error('Something went wrong!', error);
-          // If the result is unknown (no response body, timeout etc.) we simply resubmit
         });
 
 
-  }
 
+
+
+
+    }
+
+    async buyToken() {
+
+        let messages = [];
+        let returnObject = {
+            data: {},
+            message: messages
+        };
+
+        let operations = [];
+
+        // check if account has enought balance
+        if (this.accountBalances)
+            this.accountBalances.map((balance) => {
+                if (balance.asset_code === this.ASSETCODE && balance.asset_issuer === this.issuerAccount.PublicKey) {
+                    this.hasTrustLine = true;
+                }
+            })
+
+
+
+        try {
+            const receiverDetail = await this.server.loadAccount(this.account.publicKey);
+            console.log('rcvrDetails: ', receiverDetail);
+
+            // build a transaction
+            let transaction = new StellarSdk.TransactionBuilder(receiverDetail);
+
+            if (!this.hasTrustLine) {
+                let customAsset = new StellarSdk.Asset(this.ASSETCODE, this.issuerAccount.PublicKey);
+                let operationObj = {
+                    asset: customAsset
+                };
+
+                transaction.addOperation(StellarSdk.Operation.changeTrust(operationObj));
+            }
+
+            transaction.addOperation(StellarSdk.Operation.manageOffer({
+                buying: new StellarSdk.Asset(this.ASSETCODE, this.issuerAccount.PublicKey),
+                selling: StellarSdk.Asset.native(),
+                amount: String(this.amount),
+                price: 100
+            }))
+
+
+            // build and sign transaction
+            let builtTx =  transaction.setTimeout(30).build();
+            builtTx.sign(StellarSdk.Keypair.fromSecret(this.account.privateKey));
+
+            this.server.submitTransaction(builtTx)
+                .then((result) => {
+                    console.log(result);
+                    return this.server.operations()
+                        .forTransaction(result.hash)
+                        .call();
+                }).then((_response_) => {
+                    console.log(_response_.records[0].transaction_successful);
+                    // this.resultToken = _response_.records[0].transaction_successful;
+                    return _response_.records[0].transaction_successful;
+                }).then(() => {
+                    console.log('Success');
+                })
+
+        } catch (error) {
+            console.log("error: ", error);
+            messages.push('An error occured. Check logs');
+        }
+    }
 }
