@@ -1,11 +1,16 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
     <ion-title>buy-token</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-button color="primary" (click)="createTrustLine()">Create Trust line</ion-button>
-
-
+  <ion-card padding>
+    <ion-card-title> Buy Tokens </ion-card-title>
+    <ion-input type="text" color="primary" placeholder="Number of Gebeya token" [(ngModel)]="amount"></ion-input>
+    <ion-button color="primary" (click)="buyToken()"> Buy Token</ion-button>
+  </ion-card>
 </ion-content>
